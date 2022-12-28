@@ -2,20 +2,20 @@ const gameBoard = (() => {
     let board = [
         ['X', 'O', 'X'],
         ['X', 'X', 'O'],
-        ['O', 'X', 'O']
+        ['O', 'X', 'X']
     ];
 
     const threeInRow = () => {
-        return ((this.board[0][0] === this.board[0][1] && this.board[0][1] === this.board[0][2])
-                || (this.board[0][0] === this.board[1][0] && this.board[1][0] === this.board[2][0])
-                || (this.board[0][0] === this.board[1][1] && this.board[1][1] === this.board[2][2])
-                || (this.board[2][0] === this.board[2][1] && this.board[2][1] === this.board[2][2])
-                || (this.board[0][2] === this.board[1][2] && this.board[1][2] === this.board[2][2])
-                || (this.board[2][0] === this.board[1][1] && this.board[1][1] === this.board[0][2]));
+        return ((gameBoard.board[0][0] === gameBoard.board[0][1] && gameBoard.board[0][1] === gameBoard.board[0][2])
+                || (gameBoard.board[0][0] === gameBoard.board[1][0] && gameBoard.board[1][0] === gameBoard.board[2][0])
+                || (gameBoard.board[0][0] === gameBoard.board[1][1] && gameBoard.board[1][1] === gameBoard.board[2][2])
+                || (gameBoard.board[2][0] === gameBoard.board[2][1] && gameBoard.board[2][1] === gameBoard.board[2][2])
+                || (gameBoard.board[0][2] === gameBoard.board[1][2] && gameBoard.board[1][2] === gameBoard.board[2][2])
+                || (gameBoard.board[2][0] === gameBoard.board[1][1] && gameBoard.board[1][1] === gameBoard.board[0][2]));
     }
 
     const clear = () => {
-        this.board = [[],[],[]];
+        gameBoard.board = [[],[],[]];
     }
 
     return { board, threeInRow, clear };
