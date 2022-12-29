@@ -1,4 +1,12 @@
 .game-board {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 100px 100px 100px;
+}
+
+.game-square {
+    border: 1px solid black;
+    height: 100px;
+    width: 100px;
+    text-align: center;
+    font-size: 50px;
 }

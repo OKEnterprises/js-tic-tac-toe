@@ -5,8 +5,6 @@ const gameBoard = (() => {
     ['O', 'X', 'X']
   ];
 
-  let turn = 'X';
-
   const threeInRow = () => {
     return ((gameBoard.board[0][0] === gameBoard.board[0][1] && gameBoard.board[0][1] === gameBoard.board[0][2])
       || (gameBoard.board[0][0] === gameBoard.board[1][0] && gameBoard.board[1][0] === gameBoard.board[2][0])
@@ -37,7 +35,7 @@ const gameBoard = (() => {
     ];
   }
 
-  const addMark = (row, col) => {
+  const addMark = (row, col, character) => {
     if (gameBoard.board[row][col] === '') {
       gameBoard.board[row][col] = character;
     }
@@ -48,44 +46,78 @@ const gameBoard = (() => {
 })();
 
 const displayController = (() => {
-    const renderBoard = (gameBoard) => {
-        const displaySquares = document.querySelectorAll(".game-square");
 
-        displaySquares.forEach(square => {
-            let row = square.dataset.row;
-            let col = square.dataset.col;
+  const gameInfo = document.querySelector('.game-info');
 
-            square.textContent = gameBoard.board[row][col];
-            square.addEventListener('click', () => {
-                gameBoard.addMark(row, col);
-            });
-        });
-    }
-    
+  const welcomeMsg = () => {
+    gameInfo.textContent = 'Player 1 starts, playing Xs.';
+  }
+  
+  const winMsg = (player) => {
+    const { name, character } = player;
+    gameInfo.textContent = `Congratulations! ${name} wins!`;
+  }
+
+  const displaySquares = document.querySelectorAll('.game-square');
+
+  const renderBoard = () => {
+    displaySquares.forEach(square => {
+      let row = square.dataset.row;
+      let col = square.dataset.col;
+
+      square.textContent = gameBoard.board[row][col];
+    });
+  }
+
+  return { displaySquares, renderBoard };
+
 })();
 
-const game = (() => {
-    const gameLoop = ((p1, p2) => {
-        while (!gameBoard.boardFull() && !gameBoard.threeInRow()) {
-            
-        }
-    });
+const playerFactory = (name, character) => {
+  return { name, character };
+}
 
-    return { gameLoop, }
+const game = (() => {
+  let turn = 'X';
+
+  const flipTurn = () => {
+    if (turn === 'X') {
+        turn = 'O';
+    } else if (turn === 'O') {
+        turn = 'X';
+    }
+  }
+
+  const player1 = playerFactory(prompt('Player 1 Name'), 'X'); 
+
+  const player2 = playerFactory(prompt('Player 2 Name'), 'O');
+
+  const mountEventListeners = () => {
+    displayController.displaySquares.forEach(square => {
+      square.addEventListener('click', () => {
+        gameBoard.addMark(square.dataset.row, square.dataset.col, turn);
+        displayController.renderBoard();
+        flipTurn();
+      });
+    });
+  }
+
+  const gameLoop = () => {
+    gameBoard.clear();
+    displayController.renderBoard();
+    mountEventListeners();
+
+    while (!gameBoard.boardFull() && !gameBoard.threeInRow()) {
+
+    }
+
+    if (gameBoard.threeInRow) {
+
+    }
+  };
+
+    return { turn, gameLoop }
 
  })(); 
 
-const playerFactory = (name, character) => {
-    return { name, character };
-}
-
-const name1 = prompt("Name of Player 1");
-const name2 = prompt("Name of Player 2");
-
-const player1 = playerFactory(name1, 'X');
-const player2 = playerFactory(name2, 'O');
-
-const gameInfo = document.querySelector('#game-info');
-gameInfo.textContent = "Player 1 starts, playing Xs.";
-
-game.gameLoop(player1, player2);
+game.gameLoop();
