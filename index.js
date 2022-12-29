@@ -1,26 +1,32 @@
 const gameBoard = (() => {
   let board = [
-    ['X', 'O', 'X'],
-    ['X', 'X', 'O'],
-    ['O', 'X', 'X']
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', '']
   ];
 
   const threeInRow = () => {
-    return ((gameBoard.board[0][0] === gameBoard.board[0][1] && gameBoard.board[0][1] === gameBoard.board[0][2])
-      || (gameBoard.board[0][0] === gameBoard.board[1][0] && gameBoard.board[1][0] === gameBoard.board[2][0])
-      || (gameBoard.board[0][0] === gameBoard.board[1][1] && gameBoard.board[1][1] === gameBoard.board[2][2])
-      || (gameBoard.board[2][0] === gameBoard.board[2][1] && gameBoard.board[2][1] === gameBoard.board[2][2])
-      || (gameBoard.board[0][2] === gameBoard.board[1][2] && gameBoard.board[1][2] === gameBoard.board[2][2])
-      || (gameBoard.board[2][0] === gameBoard.board[1][1] && gameBoard.board[1][1] === gameBoard.board[0][2]));
-    }
+    const row0 = (board[0][0] !== '' && board[0][0] === board[0][1] && board[0][1] === board[0][2]);
+    const row1 = (board[1][0] !== '' && board[1][0] === board[1][1] && board[1][1] === board[1][2]);
+    const row2 = (board[2][0] !== '' && board[2][0] === board[2][1] && board[2][1] === board[2][2]);
+
+    const col0 = (board[0][0] !== '' && board[0][0] === board[1][0] && board[1][0] === board[2][0]);
+    const col1 = (board[0][1] !== '' && board[0][1] === board[1][1] && board[1][1] === board[2][1]);
+    const col2 = (board[0][2] !== '' && board[0][2] === board[1][2] && board[1][2] === board[2][2]);
+
+    const diagA = (board[0][0] !== '' && board[0][0] === board[1][1] && board[1][1] === board[2][2]);
+    const diagB = (board[0][2] !== '' && board[0][2] === board[1][1] && board[1][1] === board[2][0]);
+
+    return row0 || row1 || row2 || col0 || col1 || col2 || diagA || diagB;
+  }
 
   const boardFull = () => {
-      for (let i = 0; i < gameBoard.board.length; i++) {
-        for (let j = 0; j < gameBoard.board.length; j++) {
-          if (gameBoard.board[i][j] === '') return false;
-        }
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (board[i][j] === '') return false;
       }
-      return true;
+    }
+    return true;
   }
 
   const tie = () => {
@@ -46,7 +52,6 @@ const gameBoard = (() => {
 })();
 
 const displayController = (() => {
-
   const gameInfo = document.querySelector('.game-info');
 
   const welcomeMsg = () => {
@@ -56,6 +61,10 @@ const displayController = (() => {
   const winMsg = (player) => {
     const { name, character } = player;
     gameInfo.textContent = `Congratulations! ${name} wins!`;
+  }
+
+  const tieMsg = () => {
+    gameInfo.textContent = "It's a tie."
   }
 
   const displaySquares = document.querySelectorAll('.game-square');
@@ -69,7 +78,7 @@ const displayController = (() => {
     });
   }
 
-  return { displaySquares, renderBoard };
+  return { gameInfo, welcomeMsg, winMsg, tieMsg, displaySquares, renderBoard };
 
 })();
 
@@ -107,17 +116,13 @@ const game = (() => {
     displayController.renderBoard();
     mountEventListeners();
 
-    while (!gameBoard.boardFull() && !gameBoard.threeInRow()) {
-
+    for (let i = 0; i < 9; i++) {
+      
     }
+  }
 
-    if (gameBoard.threeInRow) {
+  return { turn, player1, player2, mountEventListeners, gameLoop }
 
-    }
-  };
-
-    return { turn, gameLoop }
-
- })(); 
+})(); 
 
 game.gameLoop();
