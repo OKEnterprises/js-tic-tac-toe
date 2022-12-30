@@ -107,18 +107,17 @@ const game = (() => {
         gameBoard.addMark(square.dataset.row, square.dataset.col, turn);
         displayController.renderBoard();
         flipTurn();
+        
       });
     });
   }
 
-  const gameLoop = () => {
+  const gameSetup = () => {
     gameBoard.clear();
     displayController.renderBoard();
     mountEventListeners();
 
-    for (let i = 0; i < 9; i++) {
-      
-    }
+
   }
 
   return { turn, player1, player2, mountEventListeners, gameLoop }
