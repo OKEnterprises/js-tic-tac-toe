@@ -67,6 +67,10 @@ const displayController = (() => {
     gameInfo.textContent = "It's a tie."
   }
 
+  const turnMsg = (player) => {
+    gameInfo.textContent = `It's ${player.name}'s turn, playing ${player.character}`
+  }
+
   const displaySquares = document.querySelectorAll('.game-square');
 
   const renderBoard = () => {
@@ -78,7 +82,7 @@ const displayController = (() => {
     });
   }
 
-  return { gameInfo, welcomeMsg, winMsg, tieMsg, displaySquares, renderBoard };
+  return { gameInfo, welcomeMsg, winMsg, tieMsg, turnMsg, displaySquares, renderBoard };
 
 })();
 
@@ -95,33 +99,68 @@ const game = (() => {
     } else if (turn === 'O') {
         turn = 'X';
     }
+    console.log(turn);
   }
 
   const player1 = playerFactory(prompt('Player 1 Name'), 'X'); 
 
   const player2 = playerFactory(prompt('Player 2 Name'), 'O');
 
+  const gameOver = () => {
+    if (gameBoard.tie()) {
+       displayController.tieMsg();
+    } else if (gameBoard.threeInRow() && turn === 'X') {
+      displayController.winMsg(player2);
+    } else if (gameBoard.threeInRow() && turn === 'O') {
+      displayController.winMsg(player1);
+    }
+  }
+
+  const resolveMove = (square) => {
+    gameBoard.addMark(square.dataset.row, square.dataset.col, turn);
+    displayController.renderBoard();
+
+    if (gameBoard.boardFull()) {
+        gameOver();
+    } else {
+        flipTurn();
+        runTurn();
+    }
+  }
+  
+  const handleClick = () => {
+    resolveMove(square);
+  }
+
   const mountEventListeners = () => {
     displayController.displaySquares.forEach(square => {
-      square.addEventListener('click', () => {
-        gameBoard.addMark(square.dataset.row, square.dataset.col, turn);
-        displayController.renderBoard();
-        flipTurn();
-        
-      });
+      square.removeEventListener('click', handleClick);
+      square.addEventListener('click', handleClick);
     });
   }
 
-  const gameSetup = () => {
-    gameBoard.clear();
+  const runTurn = () => {  
     displayController.renderBoard();
+
+    if (turn === 'X') {
+      displayController.turnMsg(player1);
+    } else {
+      displayController.turnMsg(player2);
+    }
+
     mountEventListeners();
 
-
+    if (gameBoard.threeInRow() && turn === 'X') {
+      displayController.winMsg(player1);
+    } else if (gameBoard.threeInRow() && turn === 'O') {
+      displayController.winMsg(player2);
+    } else if (gameBoard.tie()) {
+      displayController.tieMsg();
+    }
   }
 
-  return { turn, player1, player2, mountEventListeners, gameLoop }
+  return { turn, flipTurn, player1, player2, gameOver, resolveMove, mountEventListeners, runTurn }
 
 })(); 
 
-game.gameLoop();
+game.runTurn();
