@@ -9,15 +9,15 @@
 </head>
 <body>
     <div class="game-board">
-        <div class="game-square" data-row="0" data-col="0"></div>
-        <div class="game-square" data-row="0" data-col="1"></div>
-        <div class="game-square" data-row="0" data-col="2"></div>
-        <div class="game-square" data-row="1" data-col="0"></div>
-        <div class="game-square" data-row="1" data-col="1"></div>
-        <div class="game-square" data-row="1" data-col="2"></div>
-        <div class="game-square" data-row="2" data-col="0"></div>
-        <div class="game-square" data-row="2" data-col="1"></div>
-        <div class="game-square" data-row="2" data-col="2"></div>
+        <div class="game-square" data-row="0" data-col="0" onclick="game.resolveMove(0, 0)"></div>
+        <div class="game-square" data-row="0" data-col="1" onclick="game.resolveMove(0, 1)"></div>
+        <div class="game-square" data-row="0" data-col="2" onclick="game.resolveMove(0, 2)"></div>
+        <div class="game-square" data-row="1" data-col="0" onclick="game.resolveMove(1, 0)"></div>
+        <div class="game-square" data-row="1" data-col="1" onclick="game.resolveMove(1, 1)"></div>
+        <div class="game-square" data-row="1" data-col="2" onclick="game.resolveMove(1, 2)"></div>
+        <div class="game-square" data-row="2" data-col="0" onclick="game.resolveMove(2, 0)"></div>
+        <div class="game-square" data-row="2" data-col="1" onclick="game.resolveMove(2, 1)"></div>
+        <div class="game-square" data-row="2" data-col="2" onclick="game.resolveMove(2, 2)"></div>
     </div>
     <div class="game-info"></div>
     <script src="./index.js"></script>

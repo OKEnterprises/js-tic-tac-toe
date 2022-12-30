@@ -116,8 +116,8 @@ const game = (() => {
     }
   }
 
-  const resolveMove = (square) => {
-    gameBoard.addMark(square.dataset.row, square.dataset.col, turn);
+  const resolveMove = (row, col) => {
+    gameBoard.addMark(row, col, turn);
     displayController.renderBoard();
 
     if (gameBoard.boardFull()) {
@@ -128,38 +128,25 @@ const game = (() => {
     }
   }
   
-  const handleClick = () => {
-    resolveMove(square);
-  }
-
-  const mountEventListeners = () => {
-    displayController.displaySquares.forEach(square => {
-      square.removeEventListener('click', handleClick);
-      square.addEventListener('click', handleClick);
-    });
-  }
-
   const runTurn = () => {  
     displayController.renderBoard();
-
+    
     if (turn === 'X') {
       displayController.turnMsg(player1);
     } else {
       displayController.turnMsg(player2);
     }
 
-    mountEventListeners();
-
     if (gameBoard.threeInRow() && turn === 'X') {
-      displayController.winMsg(player1);
-    } else if (gameBoard.threeInRow() && turn === 'O') {
       displayController.winMsg(player2);
+    } else if (gameBoard.threeInRow() && turn === 'O') {
+      displayController.winMsg(player1);
     } else if (gameBoard.tie()) {
       displayController.tieMsg();
     }
   }
 
-  return { turn, flipTurn, player1, player2, gameOver, resolveMove, mountEventListeners, runTurn }
+  return { turn, flipTurn, player1, player2, gameOver, resolveMove, runTurn }
 
 })(); 
 
