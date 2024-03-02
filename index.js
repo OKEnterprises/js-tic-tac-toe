@@ -86,8 +86,11 @@ const displayController = (() => {
 
 })();
 
-const playerFactory = (name, character) => {
-  return { name, character };
+class Player {
+  constructor(name, character) {
+    this.name = name;
+    this.character = character;
+  }
 }
 
 const game = (() => {
@@ -102,9 +105,8 @@ const game = (() => {
     console.log(turn);
   }
 
-  const player1 = playerFactory(prompt('Player 1 Name'), 'X'); 
-
-  const player2 = playerFactory(prompt('Player 2 Name'), 'O');
+  const player1 = new Player(prompt('Player 1 Name') || 'Player 1', 'X'); 
+  const player2 = new Player(prompt('Player 2 Name') || 'Player 2', 'O');
 
   const gameOver = () => {
     if (gameBoard.tie()) {
@@ -114,9 +116,13 @@ const game = (() => {
     } else if (gameBoard.threeInRow() && turn === 'O') {
       displayController.winMsg(player1);
     }
+
+
   }
 
   const resolveMove = (row, col) => {
+    if (gameBoard.tie() || gameBoard.threeInRow()) return;
+
     gameBoard.addMark(row, col, turn);
     displayController.renderBoard();
 
